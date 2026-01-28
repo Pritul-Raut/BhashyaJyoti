@@ -36,6 +36,16 @@ mongoose
   .then(() => console.log("MongoDB is connected"))
   .catch((e) => console.log(e));
 
+
+// --- ADD THIS HEALTH CHECK ROUTE ---
+app.get("/", (req, res) => {
+    res.json({
+        success: true,
+        message: "Server is running successfully!",
+        environment: process.env.NODE_ENV || "development"
+    });
+});
+
 // --- 2. REGISTER ROUTES ---
 
 // Auth
