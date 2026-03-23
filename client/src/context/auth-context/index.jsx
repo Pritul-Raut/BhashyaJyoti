@@ -5,6 +5,26 @@ import { createContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext(null);
 
+// ─── Helper: extract the real message from an Axios error ───────────────────
+// Axios throws when the server responds with a non-2xx status.
+// The actual backend JSON lives at error.response.data, NOT error.message.
+function extractErrorMessage(error) {
+  // Server replied with a structured error body  { success: false, message: "..." }
+  if (error?.response?.data?.message) {
+    return error.response.data.message;
+  }
+  // Server replied but with no body / unexpected shape
+  if (error?.response?.status) {
+    return `Server error (${error.response.status}). Please try again.`;
+  }
+  // Request was made but no response received — network / server down
+  if (error?.request) {
+    return "Unable to reach the server. Please check your connection.";
+  }
+  // Something else went wrong (config error, etc.)
+  return error?.message || "Something went wrong. Please try again.";
+}
+
 export default function AuthProvider({ children }) {
   const [signInFormData, setSignInFormData] = useState(initialSignInFormData);
   const [signUpFormData, setSignUpFormData] = useState(initialSignUpFormData);
@@ -14,75 +34,75 @@ export default function AuthProvider({ children }) {
   });
   const [loading, setLoading] = useState(true);
 
+  // ─── REGISTER ──────────────────────────────────────────────────────────────
   async function handleRegisterUser(event) {
     event.preventDefault();
-    const data = await registerService(signUpFormData);
-  }
+    try {
+      const data = await registerService(signUpFormData);
 
-  async function handleLoginUser(event) {
-    event.preventDefault();
-    const data = await loginService(signInFormData);
-    console.log(data, "datadatadatadatadata");
+      // Backend returned 2xx but success: false (guard it)
+      if (!data.success) {
+        return { success: false, message: data.message || "Registration failed." };
+      }
 
-    if (data.success) {
-      sessionStorage.setItem(
-        "accessToken",
-        JSON.stringify(data.data.accessToken)
-      );
-      setAuth({
-        authenticate: true,
-        user: data.data.user,
-      });
-    } else {
-      setAuth({
-        authenticate: false,
-        user: null,
-      });
+      return { success: true };
+    } catch (error) {
+      // Axios threw because of a non-2xx status — extract the real backend message
+      return { success: false, message: extractErrorMessage(error) };
     }
   }
 
-  //check auth user
-
-  async function checkAuthUser() {
+  // ─── LOGIN ─────────────────────────────────────────────────────────────────
+  async function handleLoginUser(event) {
+    event.preventDefault();
     try {
-      const data = await checkAuthService();
+      const data = await loginService(signInFormData);
+
       if (data.success) {
+        sessionStorage.setItem(
+          "accessToken",
+          JSON.stringify(data.data.accessToken)
+        );
         setAuth({
           authenticate: true,
           user: data.data.user,
         });
-        setLoading(false);
+        return { success: true };
       } else {
-        setAuth({
-          authenticate: false,
-          user: null,
-        });
-        setLoading(false);
+        // 2xx response but success: false
+        setAuth({ authenticate: false, user: null });
+        return { success: false, message: data.message || "Login failed." };
       }
     } catch (error) {
-      console.log(error);
-      if (!error?.response?.data?.success) {
-        setAuth({
-          authenticate: false,
-          user: null,
-        });
-        setLoading(false);
+      // 401 / 400 / 500 — Axios throws here; pull message from error.response.data
+      setAuth({ authenticate: false, user: null });
+      return { success: false, message: extractErrorMessage(error) };
+    }
+  }
+
+  // ─── CHECK AUTH ────────────────────────────────────────────────────────────
+  async function checkAuthUser() {
+    try {
+      const data = await checkAuthService();
+      if (data.success) {
+        setAuth({ authenticate: true, user: data.data.user });
+      } else {
+        setAuth({ authenticate: false, user: null });
       }
+    } catch (error) {
+      setAuth({ authenticate: false, user: null });
+    } finally {
+      setLoading(false);
     }
   }
 
   function resetCredentials() {
-    setAuth({
-      authenticate: false,
-      user: null,
-    });
+    setAuth({ authenticate: false, user: null });
   }
 
   useEffect(() => {
     checkAuthUser();
   }, []);
-
-  console.log(auth, "gf");
 
   return (
     <AuthContext.Provider

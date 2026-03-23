@@ -1,6 +1,7 @@
 const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { updateLoginStreak } = require("../profile-controller");
 
 const registerUser = async (req, res) => {
   try {
@@ -14,7 +15,7 @@ const registerUser = async (req, res) => {
       });
     }
 
-    // 2. Check if user already exists
+    // 2. Check if user already exists (username OR email)
     const existingUser = await User.findOne({
       $or: [{ userEmail }, { userName }],
     });
@@ -29,14 +30,14 @@ const registerUser = async (req, res) => {
     // 3. Hash the Password
     const hashPassword = await bcrypt.hash(password, 10);
 
-    // 4. Create the User (Compatible with our new Schema)
+    // 4. Create the User
     const newUser = new User({
       userName,
       userEmail,
-      role: role || "user", // Default to 'user' if role is missing
+      role: role || "user",
       password: hashPassword,
-      purchasedItems: [], // Initialize empty
-      organizationMemberships: [] // Initialize empty
+      purchasedItems: [],
+      organizationMemberships: [],
     });
 
     await newUser.save();
@@ -44,7 +45,7 @@ const registerUser = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "User registered successfully!",
-      userId: newUser._id, // RETURN THE ID SO WE CAN USE IT
+      userId: newUser._id,
     });
 
   } catch (e) {
@@ -68,6 +69,9 @@ const loginUser = async (req, res) => {
         message: "Invalid credentials",
       });
     }
+
+    // ── NEW: Update login streak on every successful login ──
+    await updateLoginStreak(checkUser._id);
 
     const accessToken = jwt.sign(
       {

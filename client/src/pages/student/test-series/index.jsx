@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { fetchStudentViewTestSeriesService } from "@/services/test-service"; // We will create this service next
-import { useContext, useEffect, useState } from "react";
+import { fetchAllTestSeriesService } from "@/services/test-service"; // ← fixed import name
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -12,8 +12,7 @@ function StudentTestSeriesPage() {
 
     useEffect(() => {
         async function fetchTests() {
-            // Fetch all published test series
-            const response = await fetchStudentViewTestSeriesService();
+            const response = await fetchAllTestSeriesService();
             if (response?.success) {
                 setTestSeriesList(response.data);
             }

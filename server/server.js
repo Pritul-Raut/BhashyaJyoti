@@ -13,6 +13,10 @@ const studentCoursesRoutes = require("./routes/student-routes/student-courses-ro
 const studentCourseProgressRoutes = require("./routes/student-routes/course-progress-routes");
 const studentTestSeriesRoutes = require("./routes/student-routes/test-series-routes");
 
+const profileRoutes = require("./routes/profile-routes");
+
+
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
@@ -74,7 +78,7 @@ app.use("/student/order", studentViewOrderRoutes);
 app.use("/student/courses-bought", studentCoursesRoutes);
 app.use("/student/course-progress", studentCourseProgressRoutes);
 app.use("/student/test-series", studentTestSeriesRoutes);
-
+app.use("/profile", profileRoutes);
 app.use((err, req, res, next) => {
   console.log(err.stack);
   res.status(500).json({

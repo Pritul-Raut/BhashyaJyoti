@@ -1,49 +1,45 @@
-// server/models/Resource.js
 const mongoose = require("mongoose");
 
 const ResourceSchema = new mongoose.Schema({
-  // 1. ORGANIZATION (Filtering)
+  // 1. ORGANIZATION
   language: {
     type: String,
     required: true,
-    enum: ["English", "Japanese", "German", "Sanskrit"],
-    index: true // Makes searching faster
+    // ── To add a new language: just add it to this enum ──
+    enum: ["English", "Japanese", "German", "Sanskrit", "French", "Spanish", "Mandarin", "Hindi", "Marathi"],
+    index: true,
   },
   category: {
     type: String,
     required: true,
-    enum: ["Alphabet", "Grammar", "Vocabulary", "Stories", "AdvancedPractice"]
+    enum: ["Alphabet", "Grammar", "Vocabulary", "CommonPhrases", "Pronunciation", "Stories", "AdvancedPractice"],
   },
-  
-  // 2. HIERARCHY (For your Level system)
-  level: { type: Number, default: 1 }, // Level 1, 2, 3...
-  subType: { type: String, default: "General" }, // e.g., 'Kanji', 'Hiragana', 'Tenses', 'Nouns'
+
+  // 2. HIERARCHY
+  level:   { type: Number, default: 1 },
+  subType: { type: String, default: "General" },
 
   // 3. ACCESS CONTROL
-  isFree: { type: Boolean, default: false }, // If false, user needs 'Subscription' or 'Course'
+  isFree: { type: Boolean, default: false },
 
-  // 4. THE CONTENT (Flexible based on category)
-  title: { type: String, required: true }, // e.g., "Basic Greetings" or "Letter A"
-  
+  // 4. CONTENT
+  title: { type: String, required: true },
+
   data: [{
-    term: String,        // The word/letter (e.g., "Hello" or "あ")
-    pronunciation: String, // Phonetic (e.g., "Konnichiwa")
-    
-    // Translations (As requested: Hindi default, Marathi fallback)
+    term:          String,
+    pronunciation: String,
     translation: {
-      hindi: String,
+      hindi:   String,
       marathi: String,
-      english: String // Useful if source is Japanese
+      english: String,
     },
-    
-    definition: String,  // For Grammar rules
+    definition:      String,
     exampleSentence: String,
-    audioUrl: String,    // URL to audio file (optional for now)
-    image: String        // URL to visual aid (optional)
+    audioUrl:        String,
+    image:           String,
   }],
 
-  // Metadata
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Resource", ResourceSchema);

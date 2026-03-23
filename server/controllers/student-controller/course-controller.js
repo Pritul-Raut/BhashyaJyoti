@@ -4,42 +4,38 @@ const User = require("../../models/User");
 const getAllStudentViewCourses = async (req, res) => {
   try {
     const {
-      category = [],
-      level = [],
-      primaryLanguage = [],
+      category,
+      level,
+      primaryLanguage,
       sortBy = "price-lowtohigh",
     } = req.query;
 
-    console.log(req.query, "req.query");
+    // ─── BUG 3 FIX ────────────────────────────────────────────────────────────
+    // 1. Always filter to published courses only.
+    //    The Course schema has a typo: "isPublised" (one 's') — match it exactly.
+    // 2. Only add a filter key if the query param actually arrived.
+    //    Previously, an empty string "" was passed to split(",") which produced
+    //    ["""] and matched nothing — causing a blank white page.
+    // ──────────────────────────────────────────────────────────────────────────
+    let filters = { isPublised: true };
 
-    let filters = {};
-    if (category.length) {
-      filters.category = { $in: category.split(",") };
+    if (category && category.trim().length > 0) {
+      filters.category = { $in: category.split(",").map((s) => s.trim()) };
     }
-    if (level.length) {
-      filters.level = { $in: level.split(",") };
+    if (level && level.trim().length > 0) {
+      filters.level = { $in: level.split(",").map((s) => s.trim()) };
     }
-    if (primaryLanguage.length) {
-      filters.primaryLanguage = { $in: primaryLanguage.split(",") };
+    if (primaryLanguage && primaryLanguage.trim().length > 0) {
+      filters.primaryLanguage = { $in: primaryLanguage.split(",").map((s) => s.trim()) };
     }
 
     let sortParam = {};
     switch (sortBy) {
-      case "price-lowtohigh":
-        sortParam.pricing = 1;
-        break;
-      case "price-hightolow":
-        sortParam.pricing = -1;
-        break;
-      case "title-atoz":
-        sortParam.title = 1;
-        break;
-      case "title-ztoa":
-        sortParam.title = -1;
-        break;
-      default:
-        sortParam.pricing = 1;
-        break;
+      case "price-lowtohigh":  sortParam.pricing = 1;  break;
+      case "price-hightolow":  sortParam.pricing = -1; break;
+      case "title-atoz":       sortParam.title   = 1;  break;
+      case "title-ztoa":       sortParam.title   = -1; break;
+      default:                 sortParam.pricing = 1;  break;
     }
 
     const coursesList = await Course.find(filters).sort(sortParam);
@@ -49,11 +45,8 @@ const getAllStudentViewCourses = async (req, res) => {
       data: coursesList,
     });
   } catch (e) {
-    console.log(e);
-    res.status(500).json({
-      success: false,
-      message: "Some error occured!",
-    });
+    console.error("getAllStudentViewCourses error:", e);
+    res.status(500).json({ success: false, message: "Some error occurred!" });
   }
 };
 
@@ -70,16 +63,10 @@ const getStudentViewCourseDetails = async (req, res) => {
       });
     }
 
-    res.status(200).json({
-      success: true,
-      data: courseDetails,
-    });
+    res.status(200).json({ success: true, data: courseDetails });
   } catch (e) {
-    console.log(e);
-    res.status(500).json({
-      success: false,
-      message: "Some error occured!",
-    });
+    console.error("getStudentViewCourseDetails error:", e);
+    res.status(500).json({ success: false, message: "Some error occurred!" });
   }
 };
 
@@ -87,29 +74,21 @@ const checkCoursePurchaseInfo = async (req, res) => {
   try {
     const { id, studentId } = req.params;
 
-    // 1. Find User
     const user = await User.findById(studentId);
-
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    // 2. Check purchasedItems array
-    // We check if the current course/test ID exists in their purchased list
-    const ifStudentAlreadyBoughtCurrentCourse =
+    const alreadyPurchased =
       user.purchasedItems &&
-      user.purchasedItems.findIndex((item) => item.itemId.toString() === id) > -1;
+      user.purchasedItems.findIndex(
+        (item) => item.itemId.toString() === id
+      ) > -1;
 
-    res.status(200).json({
-      success: true,
-      data: ifStudentAlreadyBoughtCurrentCourse,
-    });
+    res.status(200).json({ success: true, data: alreadyPurchased });
   } catch (e) {
-    console.log(e);
-    res.status(500).json({
-      success: false,
-      message: "Some error occured!",
-    });
+    console.error("checkCoursePurchaseInfo error:", e);
+    res.status(500).json({ success: false, message: "Some error occurred!" });
   }
 };
 
