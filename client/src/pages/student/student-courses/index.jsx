@@ -87,7 +87,13 @@ function StudentCoursesPage() {
                     <p className="text-sm text-gray-500">{series.instructorName}</p>
                   </CardContent>
                   <CardFooter>
-                    <Button onClick={() => navigate(`/student/test-player/${series._id}`)} className="w-full">
+                    {/* <Button onClick={() => navigate(`/student/test-player/${series._id}`)} className="w-full">
+                      <PlayCircle className="mr-2 h-4 w-4" /> Attempt Tests
+                    </Button> */}
+                    <Button
+                      onClick={() => window.open("https://mock-test-bay.vercel.app/test/XWNK4E8MNQ?userId=Pritul_raut", "_blank")}
+                      className="w-full"
+                    >
                       <PlayCircle className="mr-2 h-4 w-4" /> Attempt Tests
                     </Button>
                   </CardFooter>
