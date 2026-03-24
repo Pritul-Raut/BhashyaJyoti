@@ -19,7 +19,7 @@ import PhrasesView from "./views/PhrasesView";
 import PronunciationView from "./views/PronunciationView";
 import StoriesView from "./views/StoriesView";
 import AdvancedView from "./views/AdvancedView";
-//views end
+//
 // ── Route the active tab to the right view component ─────────────────────────
 function ContentRouter({ tab, data, language }) {
   // AdvancedPractice is fully hardcoded — never needs DB data
