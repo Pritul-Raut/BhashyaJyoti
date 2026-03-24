@@ -9,7 +9,11 @@ import {
     CheckCircle2,
     Lock,
     Globe,
-    ShieldCheck
+    ShieldCheck,
+    ClipboardCheck,
+    Link as LinkIcon,
+    ExternalLink,
+    PlayCircle
 } from "lucide-react";
 import { useState } from "react";
 
@@ -209,6 +213,134 @@ function BusinessPage() {
                             <Button onClick={handleComingSoon} className="w-full bg-white text-gray-900 hover:bg-gray-100">
                                 Contact Government Relations
                             </Button>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            {/* --- EXAMFORGE PROMO SECTION --- */}
+            <section className="py-24 bg-gradient-to-br from-indigo-900 via-blue-900 to-slate-900 text-white relative overflow-hidden border-y border-blue-800">
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
+
+                <div className="container mx-auto px-6 relative z-10">
+                    <div className="flex flex-col lg:flex-row items-center gap-16">
+
+                        {/* Text / Feature List Side */}
+                        <div className="lg:w-1/2">
+                            <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold px-3 py-1 rounded-full mb-6 tracking-wide">
+                                <BarChart3 size={14} /> TaaS (Testing-as-a-Service)
+                            </div>
+
+                            <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+                                ExamForge — Online <br />
+                                <span className="text-blue-400">Test Platform</span>
+                            </h2>
+
+                            <p className="text-lg text-blue-100/80 mb-10 leading-relaxed">
+                                Need to assess your candidates or students securely? ExamForge is our dedicated platform built for educational institutions, corporate HR, and organizations.
+                            </p>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+                                <div className="flex items-start gap-4">
+                                    <div className="mt-1 bg-blue-800/50 p-2.5 rounded-lg text-blue-300 border border-blue-700/50 shadow-inner">
+                                        <ClipboardCheck size={20} />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-white mb-1">Create Exams</h4>
+                                        <p className="text-sm text-blue-200/70 leading-snug">Intuitive builder for multiple choice, essay, and structured assessments.</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-4">
+                                    <div className="mt-1 bg-blue-800/50 p-2.5 rounded-lg text-blue-300 border border-blue-700/50 shadow-inner">
+                                        <LinkIcon size={20} />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-white mb-1">Publish & Share</h4>
+                                        <p className="text-sm text-blue-200/70 leading-snug">Generate secure, unique links to send directly to your candidates.</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-4">
+                                    <div className="mt-1 bg-blue-800/50 p-2.5 rounded-lg text-blue-300 border border-blue-700/50 shadow-inner">
+                                        <ShieldCheck size={20} />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-white mb-1">Access Control</h4>
+                                        <p className="text-sm text-blue-200/70 leading-snug">Strict time limits, user-specific IDs, and anti-cheat tracking mechanisms.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <Button
+                                    onClick={() => window.open("https://examforge.pritul.tech/", "_blank")}
+                                    className="h-12 px-6 bg-white text-indigo-900 hover:bg-blue-50 font-semibold"
+                                >
+                                    Visit ExamForge <ExternalLink className="ml-2" size={16} />
+                                </Button>
+                                <Button
+                                    onClick={() => window.open("https://examforge.pritul.tech/test/XWNK4E8MNQ?userId=Pritul_raut", "_blank")}
+                                    variant="outline"
+                                    className="h-12 px-6 border-blue-500 text-blue-300 hover:bg-blue-800 hover:text-white font-semibold bg-transparent"
+                                >
+                                    <PlayCircle className="mr-2" size={16} /> Try Mock Test
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* Graphic / Visual Side */}
+                        <div className="lg:w-1/2 w-full">
+                            <div className="relative rounded-2xl bg-slate-800/50 border border-slate-700 p-3 shadow-2xl backdrop-blur-sm transform rotate-2 hover:rotate-0 transition-all duration-500 group">
+                                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+
+                                <div className="relative bg-slate-900 rounded-xl overflow-hidden border border-slate-700 flex flex-col h-[420px]">
+                                    {/* Mock Browser Header */}
+                                    <div className="h-12 border-b border-slate-800 flex items-center px-4 gap-2 bg-[#0f172a]">
+                                        <div className="flex gap-1.5 mr-4">
+                                            <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
+                                            <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                                            <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
+                                        </div>
+                                        <div className="flex-1 bg-slate-800/80 rounded-md h-7 flex items-center justify-center text-xs text-slate-400 font-mono gap-2 border border-slate-700">
+                                            <Lock size={12} className="text-green-400" /> examforge.pritul.tech
+                                        </div>
+                                    </div>
+
+                                    {/* Mock Platform UI */}
+                                    <div className="p-6 flex-1 flex flex-col bg-slate-900">
+                                        <div className="flex justify-between items-center mb-6">
+                                            <div>
+                                                <div className="h-5 w-40 bg-slate-700 rounded-md mb-2"></div>
+                                                <div className="h-3 w-24 bg-slate-800 rounded-md"></div>
+                                            </div>
+                                            <div className="h-9 w-28 bg-blue-600/90 rounded-md"></div>
+                                        </div>
+
+                                        <div className="grid grid-cols-3 gap-4 mb-6">
+                                            <div className="h-20 bg-slate-800/80 rounded-lg border border-slate-700 p-3 flex flex-col justify-between">
+                                                <div className="w-6 h-6 rounded bg-blue-500/20"></div>
+                                                <div className="h-3 w-16 bg-slate-700 rounded"></div>
+                                            </div>
+                                            <div className="h-20 bg-slate-800/80 rounded-lg border border-slate-700 p-3 flex flex-col justify-between">
+                                                <div className="w-6 h-6 rounded bg-purple-500/20"></div>
+                                                <div className="h-3 w-16 bg-slate-700 rounded"></div>
+                                            </div>
+                                            <div className="h-20 bg-slate-800/80 rounded-lg border border-slate-700 p-3 flex flex-col justify-between">
+                                                <div className="w-6 h-6 rounded bg-emerald-500/20"></div>
+                                                <div className="h-3 w-16 bg-slate-700 rounded"></div>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex-1 bg-slate-800/50 rounded-lg border border-slate-700/80 p-4">
+                                            <div className="h-4 w-32 bg-slate-700 rounded mb-4"></div>
+                                            <div className="space-y-3">
+                                                <div className="h-10 w-full bg-slate-800 rounded border border-slate-700"></div>
+                                                <div className="h-10 w-full bg-slate-800 rounded border border-slate-700"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>

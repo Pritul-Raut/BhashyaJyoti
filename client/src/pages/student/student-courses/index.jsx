@@ -91,7 +91,7 @@ function StudentCoursesPage() {
                       <PlayCircle className="mr-2 h-4 w-4" /> Attempt Tests
                     </Button> */}
                     <Button
-                      onClick={() => window.open("https://mock-test-bay.vercel.app/test/XWNK4E8MNQ?userId=Pritul_raut", "_blank")}
+                      onClick={() => window.open("https://examforge.pritul.tech/test/XWNK4E8MNQ?userId=Pritul_raut", "_blank")}
                       className="w-full"
                     >
                       <PlayCircle className="mr-2 h-4 w-4" /> Attempt Tests
