@@ -179,7 +179,7 @@ export async function resetCourseProgressService(userId, courseId) {
 
 export async function fetchResourcesService(lang, category) {
   const { data } = await axiosInstance.get(
-    `/api/resource/get?lang=${lang}&category=${category}`
+    `/resource/get?lang=${lang}&category=${category}`
   );
 
   return data;

@@ -15,6 +15,7 @@ import PaypalPaymentReturnPage from "./pages/student/payment-return";
 import TestPage from "./pages/test/TestPage";
 import StudentResources from "./pages/student/resources";
 import ProfilePage from "./pages/student/profile";   // ← NEW
+import EcomPage from './pages/ecom/index';
 
 // Instructor
 import InstructorDashboardpage from "./pages/instructor";
@@ -54,7 +55,7 @@ function App() {
         <Route path="business" element={<BusinessPage />} />
         <Route path="resources" element={<StudentResources />} />
         <Route path="payment-return" element={<PaypalPaymentReturnPage />} />
-
+        <Route path="ecom" element={<EcomPage />} />
         {/* Protected routes */}
         <Route
           path="student-courses"

@@ -62,6 +62,7 @@ function Navbar() {
                 <Link to="/home" className={isActive("/home")}>Home</Link>
                 <Link to="/courses" className={isActive("/courses")}>Explore</Link>
                 <Link to="/resources" className={isActive("/resources")}>Resources</Link>
+                <Link to="/ecom" className={isActive("/ecom")}>buy-from-us</Link>
                 <Link to="/business" className={isActive("/business")}>Business</Link>
             </div>
 

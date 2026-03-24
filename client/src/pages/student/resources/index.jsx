@@ -22,6 +22,10 @@ import AdvancedView from "./views/AdvancedView";
 
 // ── Route the active tab to the right view component ─────────────────────────
 function ContentRouter({ tab, data, language }) {
+  // AdvancedPractice is fully hardcoded — never needs DB data
+  if (tab === "AdvancedPractice") return <AdvancedView language={language} />;
+
+  // All other tabs need DB data
   if (!data?.length) return <EmptyState language={language} category={tab} />;
   switch (tab) {
     case "Alphabet": return <AlphabetView resourceData={data} />;
@@ -30,7 +34,6 @@ function ContentRouter({ tab, data, language }) {
     case "CommonPhrases": return <PhrasesView resourceData={data} />;
     case "Pronunciation": return <PronunciationView resourceData={data} />;
     case "Stories": return <StoriesView resourceData={data} />;
-    case "AdvancedPractice": return <AdvancedView resourceData={data} language={language} />;
     default: return <EmptyState language={language} category={tab} />;
   }
 }
@@ -79,8 +82,9 @@ export default function StudentResources() {
   const hasAccess = hasAccessToLanguage(selectedLang);
   const selectedLangData = ALL_LANGUAGES.find(l => l.id === selectedLang);
 
-  // Fetch resources when language / tab / access changes
+  // Fetch resources — skip for AdvancedPractice (hardcoded)
   useEffect(() => {
+    if (activeTab === "AdvancedPractice") { setResourceData([]); return; }
     if (!hasAccess) { setResourceData([]); return; }
     setLoading(true);
     fetchResourcesService(selectedLang, activeTab)
@@ -89,7 +93,6 @@ export default function StudentResources() {
       .finally(() => setLoading(false));
   }, [selectedLang, activeTab, hasAccess]);
 
-  // Reset tab when language changes
   function handleLanguageChange(lang) {
     setSelectedLang(lang);
     setActiveTab("Alphabet");
